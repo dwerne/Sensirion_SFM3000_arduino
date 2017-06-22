@@ -1,7 +1,10 @@
 /*
   SFM3000wedo.cpp - Library for reading values from flowmeter Sensirion SFM3000wedo
   https://www.sensirion.com/en/flow-sensors/mass-flow-meters-for-high-precise-measurement-of-gases/low-pressure-drop-mass-flow-meter/
+  
   Created by WeDo, Zuerich 20170616
+  
+  Based on: https://forum.arduino.cc/index.php?topic=466234.0 - thanks slomobile & nickgammon
   
   Released into the public domain.
 */
