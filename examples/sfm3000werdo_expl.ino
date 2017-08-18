@@ -20,7 +20,7 @@ void setup() {
 }
 
 void loop() {
-  int result = measflow.getvalue();
+  unsigned int result = measflow.getvalue();
 
   float Flow = ((float)result - offset) / scale;
     
