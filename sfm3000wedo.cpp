@@ -6,7 +6,7 @@
   Released into the public domain.
 */
 
-#include "SFM3000wedo.h"
+#include "sfm3000wedo.h"
 #include <Wire.h>
 
  
