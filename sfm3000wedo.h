@@ -24,13 +24,18 @@
   #include "WConstants.h"
 #endif
  
+typedef struct { 
+  unsigned int value;
+  bool crcOK;
+} SFM3000_Value_t;
+
 
 class SFM3000wedo {
   public:
     //SFM3000wedo(uint8_t i2cAddress);
 	SFM3000wedo(int i2cAddress);
     void init();
-    float getvalue();
+    SFM3000_Value_t getvalue();
     
  
   private:
