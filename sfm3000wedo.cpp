@@ -6,7 +6,7 @@
   Released into the public domain.
 */
 
-#include "SFM3000wedo.h"
+#include "sfm3000wedo.h"
 #include <Wire.h>
 
  
@@ -27,7 +27,8 @@ void SFM3000wedo::init()
 	
  
 	Wire.begin();
-	Serial.begin(9600);
+	Wire.setClock(10000);
+	//Serial.begin(9600);
 	delay(1000);
 	Wire.beginTransmission(byte(mI2cAddress)); // transmit to device with I2C mI2cAddress
 	Wire.beginTransmission(byte(mI2cAddress)); // transmit to device with I2C mI2cAddress
@@ -41,9 +42,9 @@ void SFM3000wedo::init()
 	b = Wire.read(); // second received byte stored here
 	c = Wire.read(); // third received byte stored here
 	Wire.endTransmission();
-	Serial.print(a);
-	Serial.print(b);
-	Serial.println(c);
+	//Serial.print(a);
+	//Serial.print(b);
+	//Serial.println(c);
 	
 	delay(5);
 	
@@ -52,31 +53,37 @@ void SFM3000wedo::init()
 	b = Wire.read(); // second received byte stored here
 	c = Wire.read(); // third received byte stored here
 	Wire.endTransmission();
-	Serial.print(a);
-	Serial.print(b);
-	Serial.println(c);
+	//Serial.print(a);
+	//Serial.print(b);
+	//Serial.println(c);
 	
-	delay(5);
+	//delay(5);
 	
 }
  
-float SFM3000wedo::getvalue()
+SFM3000_Value_t SFM3000wedo::getvalue()
 {
     Wire.requestFrom(mI2cAddress, 3); // read 3 bytes from device with address 0x40
 	uint16_t a = Wire.read(); // first received byte stored here. The variable "uint16_t" can hold 2 bytes, this will be relevant later
 	uint8_t b = Wire.read(); // second received byte stored here
 	uint8_t crc = Wire.read(); // crc value stored here
-	uint8_t mycrc = 0xFF; // initialize crc variable
+	uint8_t mycrc = 0; // initialize crc variable
 	mycrc = crc8(a, mycrc); // let first byte through CRC calculation
 	mycrc = crc8(b, mycrc); // and the second byte too
+	SFM3000_Value_t value;
 	if (mycrc != crc) { // check if the calculated and the received CRC byte matches
 		//Serial.println("Error: wrong CRC");
+		value.crcOK = false;
+	} else {
+		value.crcOK = true;
 	}
 	a = (a << 8) | b; // combine the two received bytes to a 16bit integer value
 	// a >>= 2; // remove the two least significant bits
 	//float Flow = (float)a;
 	int Flow=a;
-	return Flow;
+	
+	value.value = Flow;
+	return value;
 }
 
 uint8_t SFM3000wedo::crc8(const uint8_t data, uint8_t crc)
@@ -89,17 +96,3 @@ uint8_t SFM3000wedo::crc8(const uint8_t data, uint8_t crc)
 		}
 	return crc;
 }
-
-
-
-
-
-
-// Linear interpolation
-// float Fader::lerp (float m1, float M1, float m2, float M2, float v1)
-// {
-  // float d  = M1 - m1;
-  // float c  = (M2 - m2) / d;
-  // float o = ( -(M2 * m1) + (m2 * m1) + m2 * d) / d;
-  // return v1 * c + o;
-// }
