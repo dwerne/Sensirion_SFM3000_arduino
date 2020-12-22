@@ -27,7 +27,6 @@ void SFM3000wedo::init()
 	
  
 	Wire.begin();
-	Serial.begin(9600);
 	delay(1000);
 	Wire.beginTransmission(byte(mI2cAddress)); // transmit to device with I2C mI2cAddress
 	Wire.beginTransmission(byte(mI2cAddress)); // transmit to device with I2C mI2cAddress
